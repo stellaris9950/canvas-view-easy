@@ -43,7 +43,7 @@ pygame.init()
 # Constants
 window_width, window_height = 800, 600
 canvas_width, canvas_height = 1200, 600
-gravity = 0.5
+gravity = 0.75
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -52,7 +52,7 @@ RED = (255, 0, 0)
 window = pygame.display.set_mode((window_width, window_height))
 
 # Create a square
-square = Square((300, 300), 50, 1)
+square = Square((300, 300), 50, 10)
 
 # Platforms
 platforms = [
@@ -68,15 +68,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_w and square.on_ground:
-                square.velocity.y = -10  # Jump strength
+        # if event.type == pygame.KEYDOWN:
+        #     if event.key == pygame.K_w and square.on_ground:
+        #         square.velocity.y = -20  # Jump strength
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
         square.position.x -= square.speed
     if keys[pygame.K_d]:
         square.position.x += square.speed
+    if keys[pygame.K_w] and square.on_ground:
+        square.velocity.y = -20  # Jump strength
+
 
     # Move and draw the square
     square.move(platforms, canvas_height)
@@ -88,6 +91,8 @@ while running:
         pygame.draw.rect(window, RED, (platform.x - offset_x, platform.y, platform.width, platform.height))
     square.draw(window, offset_x)
 
+
     pygame.display.flip()
+    pygame.time.Clock().tick(60)
 
 pygame.quit()
